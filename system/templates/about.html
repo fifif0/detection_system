@@ -1,3 +1,60 @@
 {% extends 'base.html' %} {% block content %} {% load widget_tweaks %}
+<section class="container py-5">
+    <div class="row align-items-center my-5">
+        <div class="col-md-12 px-5">
+            <h2>Opis systemu</h2>
+            <p> System detekcji dezinformacji to narzędzie, które łączy techniki uczenia maszynowego z zaawansowanymi
+                metodami zbierania i analizy danych, aby skutecznie identyfikować wiadomości jako prawdziwe lub
+                fałszywe. Wykorzystując różnorodne modele analizy tekstu, system nie tylko ocenia treść wiadomości, ale
+                także gromadzi i analizuje dodatkowe informacje z różnych źródeł.</p>
+        </div>
+    </div>
+
+    <div class="row align-items-center my-5">
+        <div class="col-md-6 px-5 pe-2">
+            <h3>Regresja Logistyczna (Logistic Regression)</h3>
+            <p>Prosta i szybka, idealna do oceny ogólnych trendów i wyraźnych wzorców w danych. Skuteczna, gdy
+                wiadomości są niezbyt złożone. Polecana w
+                sytuacjach, gdy potrzebujesz szybkiego przeglądu wiadomości.</p>
+
+        </div>
+
+
+        <div class="col-md-6 px-5 pe-2">
+            <h3>Las Losowy (Random Forest)</h3>
+            <p>Las losowy to agregacja wielu drzew decyzyjnych, co sprawia, że jest mniej podatny na błędy pojedynczego
+                drzewa. Idealny do analizy złożonych zestawów danych, gdzie wiele różnych cech może wpływać na wynik.
+            </p>
+        </div>
+
+    </div>
+    <div class="row align-items-center my-5">
+        <div class="col-md-6 px-5 pe-2">
+            <h3>Drzewo Decyzyjne (Decision Tree)</h3>
+            <p>Drzewa decyzyjne to intuicyjne modele, które symulują proces podejmowania decyzji krok po kroku. Mogą
+                popełniać błędy, zwłaszcza w przypadku bardzo
+                złożonych danych. Idealne do edukacyjnych celów i prostych analiz.</p>
+
+        </div>
+
+        <div class="col-md-6 px-5 pe-2">
+            <h3>Gradient Boosting</h3>
+            <p>Model skupia się na najtrudniejszych do przewidzenia
+                przypadkach. Jest niezwykle skuteczny w radzeniu sobie ze
+                złożonymi problemami. Idealny, gdy masz do czynienia z zaawansowanymi analizami.</p>
+        </div>
+
+    </div>
+
+    <div class="row align-items-center my-5">
+        <div class="col-md-6 pe-2 px-5">
+            <h3>Support Vector Machine(SVM)</h3>
+            <p>SVM to zaawansowany model, doskonały do analizowania złożonych danych. Doskonale radzi sobie z trudnymi
+                przypadkami. Dzięki swojej precyzji, SVM jest w stanie dokładnie oddzielić fakt od fikcji, nawet gdy
+                dane są skomplikowane i niestandardowe.</p>
+
+        </div>
+
+</section>
 
 {% endblock %}

@@ -103,42 +103,42 @@ def prepare_vectorizer(x_train, x_test):
     vectorization = TfidfVectorizer(ngram_range=(1,2), max_df=0.7, min_df=10)
     _train = vectorization.fit_transform(x_train)
     _test = vectorization.transform(x_test)
-    save_model(vectorization, "//home//ubuntu//apraca-inz//system_detection//vector//TfidfVectorizer.pkl")
+    save_model(vectorization, "system_detection//vector//TfidfVectorizer.pkl")
     return _train, _test, vectorization
 
 #Trenowanie modelu klasyfikacyjnego - Random Forest
 def train_model_random_forest(x_train, y_train):
     model = RandomForestClassifier(random_state = 0)
     model.fit(x_train, y_train)
-    save_model(model, "//home//ubuntu//apraca-inz//system_detection//models//RandomForest.pkl")
+    save_model(model, "system_detection//models//RandomForest.pkl")
     return model
 
 #Trenowanie modelu klasyfikacyjnego - Logistic Regression
 def train_model_logistic_regression(x_train, y_train):
     model = LogisticRegression()
     model.fit(x_train, y_train)
-    save_model(model, "//home//ubuntu//apraca-inz//system_detection//models//LogisticRegression.pkl")
+    save_model(model, "system_detection//models//LogisticRegression.pkl")
     return model
 
 #Trenowanie modelu klasyfikacyjnego - Decision Tree
 def train_model_decision_tree(x_train, y_train):
     model = DecisionTreeClassifier()
     model.fit(x_train, y_train)
-    save_model(model, "//home//ubuntu//apraca-inz//system_detection//models//DecisionTree.pkl")
+    save_model(model, "system_detection//models//DecisionTree.pkl")
     return model
 
 #Trenowanie modelu klasyfikacyjnego - Gradient Boosting
 def train_model_gradient_boosting(x_train, y_train):
     model = GradientBoostingClassifier()
     model.fit(x_train, y_train)
-    save_model(model, "//home//ubuntu//apraca-inz//system_detection//models//GradientBoosting.pkl")
+    save_model(model, "system_detection//models//GradientBoosting.pkl")
     return model
 
 #Trenowanie modelu klasyfikacyjnego - Support Vector Machine
 def train_model_svc(x_train, y_train):
     model = SVC()
     model.fit(x_train, y_train)
-    save_model(model, "//home//ubuntu//apraca-inz//system_detection//models//SupportVectorMachine.pkl")
+    save_model(model, "system_detection//models//SupportVectorMachine.pkl")
     return model
 
 #evaluacja modelu
@@ -224,15 +224,15 @@ def evaluate_and_test_models():
     while True:
         choice = main_menu()
         if choice == "1":
-            second_menu("Logistic Regression", "//home//ubuntu//apraca-inz//system_detection//models//LogisticRegression.pkl", "//home//ubuntu//apraca-inz//system_detection//vector//TfidfVectorizer.pkl")
+            second_menu("Logistic Regression", "system_detection//models//LogisticRegression.pkl", "system_detection//vector//TfidfVectorizer.pkl")
         elif choice == "2":
-            second_menu("Random Forest", "//home//ubuntu//apraca-inz//system_detection//models//RandomForest.pkl", "//home//ubuntu//apraca-inz//system_detection//vector//TfidfVectorizer.pkl")
+            second_menu("Random Forest", "system_detection//models//RandomForest.pkl", "system_detection//vector//TfidfVectorizer.pkl")
         elif choice == "3":
-            second_menu("Decision Tree", "//home//ubuntu//apraca-inz//system_detection//models//DecisionTree.pkl", "//home//ubuntu//apraca-inz//system_detection//vector//TfidfVectorizer.pkl")
+            second_menu("Decision Tree", "system_detection//models//DecisionTree.pkl", "system_detection//vector//TfidfVectorizer.pkl")
         elif choice == "4":
-            second_menu("Gradient Boosting", "//home//ubuntu//apraca-inz//system_detection//models//GradientBoosting.pkl", "//home//ubuntu//apraca-inz//system_detection//vector//TfidfVectorizer.pkl")
+            second_menu("Gradient Boosting", "system_detection//models//GradientBoosting.pkl", "system_detection//vector//TfidfVectorizer.pkl")
         elif choice == "5":
-            second_menu("Support Vector Machine", "//home//ubuntu//apraca-inz//system_detection//models//SupportVectorMachine.pkl", "//home//ubuntu//apraca-inz//system_detection//vector//TfidfVectorizer.pkl")
+            second_menu("Support Vector Machine", "system_detection//models//SupportVectorMachine.pkl", "system_detection//vector//TfidfVectorizer.pkl")
         elif choice == "0":
             print("Zamykanie programu...")
             break
@@ -249,8 +249,8 @@ def main():
     download_nltk_resources()
 
     #Dane
-    fake_csv_path = '//home//ubuntu//apraca-inz//system_detection//SYSTEMtogeneratemodel//Datasets//Fake.csv'
-    true_csv_path = '//home//ubuntu//apraca-inz//system_detection//SYSTEMtogeneratemodel//Datasets//True.csv'
+    fake_csv_path = 'system_detection//SYSTEMtogeneratemodel//Datasets//Fake.csv'
+    true_csv_path = 'system_detection//SYSTEMtogeneratemodel//Datasets//True.csv'
 
     print('Wczytywanie danych\n')
     data_fake, data_true = load_data(fake_csv_path, true_csv_path)
