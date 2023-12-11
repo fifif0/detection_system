@@ -1,45 +1,93 @@
 {% extends 'base.html' %} {% block content %} {% load widget_tweaks %}
 <section class="container pt-5 mt-3">
     <div class="container text-center ps-5 pe-5 mb-3 pb-5">
-        <h1 class="h3 font-weight-normal text-center pb-5">Wynik analizy</h1>
+        <h1 class="h3 font-weight-normal text-center ">WYNIK ANALIZY</h1>
 
-        <p><strong>Analizowana Wiadomość:</strong> {{ news }}</p>
-        <p><strong>Wybrany Model:</strong> {{ model_choice }}</p>
-        <p><strong>Wybrany Wektoryzator:</strong> {{ vector_choice }}</p>
-        <p><strong>Wynik Analizy:</strong> {{ result }}</p>
-
-        <h1 class="h3 font-weight-normal text-center pb-2">Linki do wyszukiwania:</h1>
-        <div class="containertext-center ps-5 pe-5 mb-3 pb-5">
-            <div id="entity-container">
-                {% for entity, query_url in search_queries %}
-                <button class="entity-button" data-entity="{{ entity }}">{{ entity }}</button>
-                {% endfor %}
-            </div>
-
-            <button type="submit" class="btn btn-danger mt-4" id="generate-query-btn">Generuj Zapytanie</button>
-            <meta name="csrf-token" content="{{ csrf_token }}">
-            <div id="generated-query-container" class="mt-3">
-                <!-- Tutaj pojawią się wygenerowane zapytania -->
-            </div>
+        <div class="container text-center mb-3 mt-4 pb-2">
+            <p><a class="float-end bg-danger rounded-3 fakenews fw-bold py-2 px-4">{{ result }}</a></p>
         </div>
         <div class="container text-center">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <p><a href=" {% url 'analyze_news' %}" target="_self"
-                            class="float-end  bg-danger rounded-3 bold-link fw-bold py-2 px-4">Analizuj inną
+            <div class="row align-items-center g-1">
+                <div class="col-auto">
+                    <p><a class="bg-danger rounded-3 fake py-1 px-3">Model: <strong>{{ model_choice }}</strong></a>
+                    </p>
+                </div>
+                <div class="col-auto">
+                    <p><a class="bg-danger rounded-3 fake ms-3 py-1 px-3">Wektoryzator:
+                            <strong>{{ vector_choice }}</strong></a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+        <div class="container text-center ps-5 pe-5 mb-5 pb-5 pt-3 mt-4 border rounded-3 border-danger"
+            style="border: 3px solid">
+            <p class="text-center"><strong>Treść wiadomości:</strong></p>
+            <p>{{ news }}</p>
+        </div>
+
+
+
+        <h1 class="h3 font-weight-normal text-center pb-2">TWORZENIE ZAPYTAŃ</h1>
+        <div class="container text-center ps-5 pe-5 mb-5 pb-5 pt-3 mt-4 border rounded-3 border-danger">
+            <div class="containertext-center ps-5 pe-5 mb-3">
+                <div id="entity-container">
+                    {% for entity, query_url in search_queries %}
+                    <button class="entity-button" data-entity="{{ entity }}">{{ entity }}</button>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-danger mt-4" id="generate-query-btn">Generuj Zapytanie</button>
+                <meta name="csrf-token" content="{{ csrf_token }}">
+                <div id="generated-query-container" class="mt-3">
+
+                </div>
+            </div>
+
+        </div>
+        <h1 class="h3 font-weight-normal text-center pb-2">WYSZUKIWARKA</h1>
+        <div class="container text-center ps-5 pe-5 mb-5 pb-5 pt-3 mt-4 border rounded-3 border-danger">
+            <div class="containertext-center ps-5 pe-5 mb-3">
+                <div id="entity-container">
+                    {% for entity, query_url in search_queries %}
+                    <button class="search-entity-button" data-entity="{{ entity }}">{{ entity }}</button>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-danger mt-4" id="search-button">Szukaj</button>
+                <meta name="csrf-token" content="{{ csrf_token }}">
+                <div id="search-results-container" class="mt-3">
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="container text-center">
+            <div class="row align-items-center g-1">
+                <div class="col-auto">
+                    <p><a href=" {% url 'analyze_news' %}" target="_self" class="rounded-3 bold-link py-1 px-3">Analizuj
+                            inną
                             wiadomość</a>
                     </p>
                 </div>
-                <div class="col-md-4">
-                    <p><a href="{% url 'index' %}" target="_self"
-                            class="float-end  bg-danger rounded-3 bold-link fw-bold py-2 px-4">Powrót do strony
+                <div class="col-auto">
+                    <p><a href="{% url 'index' %}" target="_self" class="rounded-3 bold-link ms-3 py-1 px-3">Powrót do
+                            strony
                             głównej</a>
                     </p>
 
                 </div>
             </div>
         </div>
+
         <script>
+
             function getCookie(name) {
                 let cookieValue = null;
                 if (document.cookie && document.cookie !== '') {
@@ -98,8 +146,61 @@
                             queryContainer.innerHTML = '<p>Wystąpił błąd podczas generowania zapytania.</p>';
                         });
                 });
+
+                // Nowa funkcjonalność wyszukiwania
+                const searchEntityButtons = document.querySelectorAll('.search-entity-button');
+                const searchResultsContainer = document.getElementById('search-results-container');
+                const searchButton = document.getElementById('search-button');
+                let selectedSearchEntities = [];
+
+                searchEntityButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        const entity = this.getAttribute('data-entity');
+                        if (selectedSearchEntities.includes(entity)) {
+                            const index = selectedSearchEntities.indexOf(entity);
+                            selectedSearchEntities.splice(index, 1);
+                            this.classList.remove('selected');
+                        } else {
+                            selectedSearchEntities.push(entity);
+                            this.classList.add('selected');
+                        }
+                    });
+                });
+                searchButton.addEventListener('click', function () {
+                    if (selectedSearchEntities.length === 0) {
+                        alert('Wybierz przynajmniej jedną encję przed wyszukiwaniem.');
+                        return;
+                    }
+
+                    fetch('/search_web/', {
+                        method: 'POST',
+                        body: JSON.stringify({ selectedSearchEntities: selectedSearchEntities }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.search_results && Array.isArray(data.search_results)) {
+                                searchResultsContainer.innerHTML = data.search_results.map(result =>
+                                    `<p>Tytuł: ${result.Title}<br>URL: <a href="${result.URL}" target="_self" class="rounded-3 bold-link ms-3 py-1 px-3">LINK</a></p>`
+                                ).join('');
+                            } else {
+                                searchResultsContainer.innerHTML = '<p>Brak wyników do wyświetlenia.</p>';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            searchResultsContainer.innerHTML = '<p>Wystąpił błąd podczas wyszukiwania.</p>';
+                        });
+                });
             });
+
         </script>
+
+
+
 
 
 </section>

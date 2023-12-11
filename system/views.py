@@ -1,10 +1,8 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render
 from .models import News
 from .forms import NewsForm
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from .news_classifier import manual_testing_from_pkl, output_lable, word_labelling, generate_search_queries, generate_combined_search_query
+from .news_classifier import manual_testing_from_pkl, output_lable, word_labelling, generate_search_queries, generate_combined_search_query, search_link
 import json
 
 def index(request):
@@ -33,7 +31,6 @@ def analyze_news(request):
 
             unique_entities = word_labelling(news)
             search_queries = generate_search_queries(unique_entities)
-
             news_entry = News(
                 content=news,
                 result=resultToTEXT,
@@ -54,25 +51,6 @@ def analyze_news(request):
         form = NewsForm()
     return render(request, 'analyze_news.html', {'form': form})
 
-def submit_news(request):
-    if request.method == 'POST':
-        form = NewsForm(request.POST)
-        if form.is_valid():
-            news_entry = form.save(commit=False)
-            news_entry.entities = word_labelling(news_entry.content)
-            news_entry.result = analyze_news(news_entry.content, news_entry.analysis_model)
-            news_entry.save()
-            return redirect('search_queries', news_entry.id)
-    else:
-        form = NewsForm()
-    return render(request, 'system/submit_news.html', {'form': form})
-
-def result(request, news_id):
-    news_entry = News.objects.get(id=news_id)
-    queries = generate_search_queries(news_entry.entities)
-    return render(request, 'system/result.html', {'news_entry': news_entry, 'queries': queries})
-
-
 
 def generate_query(request):
     if request.method == 'POST':
@@ -86,4 +64,14 @@ def generate_query(request):
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
 
-
+def search_web(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            selected_entity = data.get('selectedSearchEntities')
+            search_results = search_link(selected_entity)
+            return JsonResponse({'search_results': search_results})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)

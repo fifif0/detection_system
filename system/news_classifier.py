@@ -1,16 +1,17 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import re
 import string
 import pickle
 import string
 import spacy
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, precision_score, recall_score
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import  WordNetLemmatizer
+from duckduckgo_search import DDGS
+####
+import requests
+from bs4 import BeautifulSoup
 
 def download_nltk_resources():
     resources = ['punkt', 'stopwords', 'averaged_perceptron_tagger', 'maxent_ne_chunker', 'words']
@@ -19,7 +20,8 @@ def download_nltk_resources():
             nltk.data.find(resource)
         except LookupError:
             nltk.download(resource)
-
+ 
+#SYSTEM DETEKCJI DEZINFORMACJI
 def load_model(filename):
     try:
         with open(filename, 'rb') as file:  
@@ -71,7 +73,11 @@ def manual_testing_from_pkl(news, file_model, file_vec):
     model = load_model(file_model)
     pred = model.predict(new_xv_test)
     return pred
+#KONIEC SYSTEMU DETEKCJI DEZINFORMACJI
 
+
+#SYSTEM ZMIERANIA DODATKOWYCH DANYCH
+        #MODUŁ TWORZENIA ZAPYTAŃ
 def word_labelling(news):
     nlp = spacy.load("en_core_web_sm")
     doc = nlp(news)
@@ -87,13 +93,11 @@ def word_labelling(news):
             unique_entities[ent.label_].append(ent.text)
     return unique_entities
 
-
 def generate_search_queries(unique_entities):
     search_queries = []
 
     for label, entities in unique_entities.items():
         for entity in entities:
-            # Użyj funkcji create_google_query do tworzenia zapytań
             query_url = create_google_query(entity, 'all')
             search_queries.append((entity, query_url))
 
@@ -116,20 +120,6 @@ def create_google_query(keywords, search_in='all'):
     query_url = base_url + query.replace(' ', '+')
     return query_url
 
-def generate_custom_search_query(selected_entities):
-    search_queries = []
-    for entity in selected_entities:
-        query_url = create_google_query(entity, 'all')
-        search_queries.append((entity, query_url))
-    return search_queries
-
-def create_google_query_fragment(keywords, search_in):
-    query_templates = {
-        'intext': 'intext:"{}"',
-        'intitle': 'intitle:"{}"',
-        'inurl': 'inurl:"{}"'
-    }
-    return query_templates[search_in].format(keywords)
 
 def generate_combined_search_query(selected_entities):
     base_url = "https://www.google.com/search?q="
@@ -150,3 +140,48 @@ def generate_combined_search_query(selected_entities):
         full_query_urls.append(full_query_url)
 
     return '\n'.join(full_query_urls)
+
+
+def create_google_query_fragment(keywords, search_in):
+    query_templates = {
+        'intext': 'intext:"{}"',
+        'intitle': 'intitle:"{}"',
+        'inurl': 'inurl:"{}"'
+    }
+    return query_templates[search_in].format(keywords)
+
+#KONIEC MODUŁU TWORZENIA ZAPYTAŃ
+#MODUŁ WYSZUKIWANIA INFORMACJI
+'''
+def search_link(queries):
+    query = '+'.join(queries)
+    url = f"https://duckduckgo.com/html/?q={query}"
+
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    response = requests.get(url, headers=headers)
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    results_list = []
+
+    for result in soup.find_all('div', class_='result', limit=5):
+        title = result.find('a', class_='result__a').text
+        link = result.find('a', class_='result__a')['href']
+        results_list.append({'Title': title, 'URL': link})
+
+    return results_list
+'''
+def search_link(queries):
+    print("test")
+    with DDGS() as ddgs:
+        results_list = []
+        query = ' intext:"{}"'.format('" AND "'.join(queries))
+
+        for result in ddgs.text(query):
+            results_list.append({
+                'Title': result['title'],
+                'URL': result['href']
+            })
+            print(results_list)
+        return results_list
+#KONIEC MODUŁU WYSZUKIWANIA INFORMACJI
+#KONIEC SYSTEMU ZBIERANIA DODATKOWYCH DANYCH

@@ -3,7 +3,7 @@
     <div class="container text-center ps-5 pe-5 mb-3 pb-5">
         <h1 class="h3 font-weight-normal text-center">System rozpoznawania dezinformacji</h1>
 
-        <div class="form-container"> <!-- Kontener formularza z dodatkowymi stylami -->
+        <div class="form-container">
             <form method="post" class="needs-validation" novalidate>
                 {% csrf_token %}
                 <div class="form-group mt-3 mb-3">
@@ -15,7 +15,7 @@
                 <div class="form-group mt-3 mb-3">
                     <label for="{{ form.model_choice.id_for_label }}"
                         class="form-label">{{ form.model_choice.label }}</label>
-                    {{ form.model_choice|add_class:"form-select" }}
+                    {{ form.model_choice|add_class:"form-select"}}
                 </div>
 
                 <div class="form-group mt-3 mb-3">
