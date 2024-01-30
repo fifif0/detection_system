@@ -4,4 +4,4 @@ Projekt ten ma na celu stworzenie projektu oraz implementację aplikacji interne
 
 # Wygląd aplikacji
 
-![Ekran główny](img/ekran1.png)
+![Ekran główny](IMG/ekran1.png)
