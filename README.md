@@ -18,5 +18,5 @@ Projekt ten ma na celu stworzenie projektu oraz implementację aplikacji interne
 > Moduł wyszukiwania dodatkowych informacji
 ![Ekran główny](IMG/test6.PNG)
 
-> Ekran główny
+> Schemat systemu
 ![Ekran główny](IMG/zaleznosc_miedzy_systemami_wszystko_razem.png)
